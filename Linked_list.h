@@ -1,11 +1,16 @@
 #pragma once
 #include<iostream>
+#include<ctime>
+using namespace std;
 struct node {
-	std::string FileName;
-	int NO_Timeaccess = 0;
-	int date;/* create it in date class later*/
-	int precedance;
-	node* Link = (node*)malloc(sizeof(node));
+	string folder;
+	string name;
+	time_t created_date;
+	int access_count;
+	node* next;
+
+	node(const string& folder, const string& name, time_t created_date, int access_count)
+		: folder(folder), name(name), created_date(created_date), access_count(access_count), next(nullptr) {}
 };
 
 typedef class Linkedlist {
@@ -14,11 +19,7 @@ private:
 	int size;
 public:
 	Linkedlist();
-	Linkedlist(int size, int arr[]);
 	int Size();
-	void Displaylist();
-	void Insert(int position, double element);
-	void Delete(int position);
-	int Find(int key);
+	void Insert(node * element);
 
 } list;
