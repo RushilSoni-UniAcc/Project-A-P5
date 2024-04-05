@@ -7,11 +7,27 @@ Linkedlist::Linkedlist() {
 
 
 Linkedlist::~Linkedlist() {
-    FileNode* current = head;
+    node* current = Header;
     while (current != nullptr) {
-        FileNode* temp = current;
+        node* temp = current;
         current = current->next;
         delete temp;
+    }
+}
+
+void Linkedlist::Display() {
+    node* currant = Header;
+    if (currant == nullptr) {
+        cout << "Empty list";
+    }
+    while (currant != nullptr) {
+        cout << "Name of the file\t\t: " << currant->name<< "\n";
+        cout << "number of Times accessed\t: " << currant->access_count << "\n";
+        cout << "Last date of access\t\t: " << currant->last_accessed_date << "\n";
+        cout << "Last date of modification\t: " << currant->last_modificated_date << "\n";
+        cout << "created file on\t\t\t: " << currant->created_date << "\n\n";
+        cout << "----------------------------------------" << "\n\n";
+        currant = currant->next;
     }
 }
 

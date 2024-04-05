@@ -2,37 +2,46 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "Linked_list.h"
 
-//https://www.youtube.com/watch?v=wRj9PZ2wyZI&t=57s 
 
 using namespace std;
-
-void readInputData(const string& file_path,) {
+static int filenumber = 0;
+void readInputData(const string& file_path ,Linkedlist* list) {
     ifstream file(file_path);
     if (!file.is_open()) {
-        cerr << "Failed to open file: " << file_path << endl;
+        cerr << "Failed to open file: " << file_path << "\n";
         return;
     }
-
     string line;
     getline(file, line);
-
     while (getline(file, line)) {
+        filenumber++;
         stringstream ss(line);
-        string name, access_count, date_accessed,temp;
-        
-        
+        string name, access_count_str, date_accessed, date_modified, date_created, temp;
+
+
         getline(ss, name, ',');
-        getline(ss, access_count, ',');
+        getline(ss, access_count_str, ',');
+        int access_count;
+        try {
+            access_count = stoi(access_count_str);
+        }
+        catch (const std::invalid_argument& e) {
+            cerr << "Invalid access count : In the File "<< filenumber <<" From top.\n"<<"Please check that the file name is as required.";
+            delete list;
+            continue;
+        }
         getline(ss, date_accessed, ',');
-        getline(ss, temp, ',');
-        getline(ss, temp, ',');
+        getline(ss, date_modified, ',');
+        getline(ss, date_created, ',');
         getline(ss, temp);
 
-        cout << "Name of the file : " <<"\t\t"<< name << endl;
-        cout << "number of Times accessed : " <<"\t"<< access_count << endl;
-        cout << "Last date of access  : " << "\t\t"<<date_accessed << endl;
-        cout<<endl<<"----------------------------------------"<<"\n\n";
+
+        node* X = new node(name,access_count,date_accessed,date_modified,date_created);
+        list->Insert(X);
+        
+        
 
     }
 
@@ -40,6 +49,8 @@ void readInputData(const string& file_path,) {
 }
 
 int main() {
-    readInputData("Trial excel sheet containing folders.csv");
+    Linkedlist list;
+    readInputData("Trial excel sheet containing folders.csv",&list);
+    list.Display();
     return 0;
 }
