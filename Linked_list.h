@@ -20,5 +20,6 @@ public:
 	Linkedlist();
 	int Size();
 	void Insert(node * element);
+	~Linkedlist();
 
 } list;

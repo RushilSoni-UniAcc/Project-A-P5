@@ -5,6 +5,16 @@ Linkedlist::Linkedlist() {
     Header = NULL;
 }
 
+
+Linkedlist::~Linkedlist() {
+    FileNode* current = head;
+    while (current != nullptr) {
+        FileNode* temp = current;
+        current = current->next;
+        delete temp;
+    }
+}
+
 int Linkedlist::Size() {
     return size;
 }
