@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <cstdio>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -8,16 +9,35 @@ using namespace std;
 void displayErrorMessage(const string& message, const string* description);
 
 struct node {
-	string name;
-	string created_date;
-	string last_accessed_date;
-	string last_modificated_date;
-	int access_count;
-	node* next;
+    string* name;
+    string* created_date;
+    string* last_accessed_date;
+    string* last_modificated_date;
+    int access_count;
+    long size_of_file;
+    string* URL;
+    node* next;
 
-	node( const string& name, int access_count, string last_accessed_date, string last_modificated_date, string created_date)
-		:  name(name), created_date(created_date), access_count(access_count), last_accessed_date(last_accessed_date), last_modificated_date(last_modificated_date), next(nullptr) {}
+    // Constructor
+    node(const string& name, int access_count, const string& last_accessed_date, const string& last_modificated_date, const string& created_date, long size_of_file, const string& URL)
+        : access_count(access_count), size_of_file(size_of_file), next(nullptr) {
+        this->name = new string(name);
+        this->created_date = new string(created_date);
+        this->last_accessed_date = new string(last_accessed_date);
+        this->last_modificated_date = new string(last_modificated_date);
+        this->URL = new string(URL);
+    }
+
+    // Destructor
+    ~node() {
+        delete name;
+        delete created_date;
+        delete last_accessed_date;
+        delete last_modificated_date;
+        delete URL;
+    }
 };
+
 
 typedef class Linkedlist {
 private:
@@ -28,6 +48,7 @@ public:
 	int Size();
 	void Insert(node * element);
 	void Display();
+	node* gethead();
 	void Make_Empty();
 	~Linkedlist();
 
@@ -47,5 +68,5 @@ bool IsValid(node* file, int acc);
 
 
 
-list readInputData(const string& file_path,list* validfile);
+void readInputData(const string& file_path,list* validfile,list* binfile);
 

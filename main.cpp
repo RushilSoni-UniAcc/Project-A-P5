@@ -5,7 +5,11 @@
 #include "Function_Module.h"
 int main() {
 	list L, p;
-	p = readInputData("Trial excel sheet containing folders.csv",&L);
+	readInputData("Trial excel sheet containing folders.csv",&L,&p);
 	L.Display();
+	cout << "\033[31m";
+	cout << "************************************************************************************************************************\n";
+	p.Display();
+	cout << "\033[0m";
 	return 0;
 }
