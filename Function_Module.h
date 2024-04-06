@@ -1,6 +1,12 @@
 #pragma once
-#include<iostream>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 using namespace std;
+
+void displayErrorMessage(const string& message, const string* description);
+
 struct node {
 	string name;
 	string created_date;
@@ -22,6 +28,17 @@ public:
 	int Size();
 	void Insert(node * element);
 	void Display();
+	void Make_Empty();
 	~Linkedlist();
 
 } list;
+
+bool is_redudant(node* file);
+bool is_old(node* file);
+bool is_empty__(node* file);
+bool is_low_accessed(node* file);
+
+bool IsValid(node* file);
+
+list readInputData(const string& file_path,list* validfile);
+

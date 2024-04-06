@@ -7,6 +7,17 @@
 
 using namespace std;
 static int filenumber = 0;
+
+void displayErrorMessage(const string& message, const string* description) {
+    string padding(20, ' ');
+
+    cout << "\033[31m";
+    cout << padding << message << "\n";
+    cout << *description << "\n";
+    cout << "\033[0m";
+}
+
+
 void readInputData(const string& file_path ,Linkedlist* list) {
     ifstream file(file_path);
     if (!file.is_open()) {
@@ -28,7 +39,8 @@ void readInputData(const string& file_path ,Linkedlist* list) {
             access_count = stoi(access_count_str);
         }
         catch (const std::invalid_argument& e) {
-            cerr << "Invalid access count : In the File "<< filenumber <<" From top.\n"<<"Please check that the file name is as required.";
+            string description = "Invalid File name : In the File " + to_string(filenumber) + " From top.\nPlease check that the file name is as required.";
+            displayErrorMessage("Invalid File name", &description);
             delete list;
             continue;
         }
@@ -46,11 +58,4 @@ void readInputData(const string& file_path ,Linkedlist* list) {
     }
 
     file.close();
-}
-
-int main() {
-    Linkedlist list;
-    readInputData("Trial excel sheet containing folders.csv",&list);
-    list.Display();
-    return 0;
 }
