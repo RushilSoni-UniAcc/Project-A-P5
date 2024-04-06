@@ -33,12 +33,19 @@ public:
 
 } list;
 
+long formatted_createdate(node* file);
+long formatted_lastaccesseddate(node* file);
+long formatted_lastmodificateddate(node* file);
+
 bool is_redudant(node* file);
 bool is_old(node* file);
 bool is_empty__(node* file);
-bool is_low_accessed(node* file);
+bool is_low_accessed(node* file, int acc);
 
-bool IsValid(node* file);
+bool IsValid(node* file, int acc);
+
+
+
 
 list readInputData(const string& file_path,list* validfile);
 

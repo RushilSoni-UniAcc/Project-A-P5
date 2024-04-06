@@ -70,36 +70,93 @@ void Linkedlist::Insert(node* element) {
     }
 }
 
+long formatted_createdate(node* file)
+{
+    int dd, mm, yyyy;
+    long x;
+
+    sscanf_s(file->created_date, "%d-%d-%d", &dd, &mm, &yyyy);
+
+    x = (yyyy * 10000) + (mm * 100) + dd;
+    return x;
+}
+
+long formatted_lastaccesseddate(node* file)
+{
+    int dd, mm, yyyy;
+    long x;
+
+    sscanf_s(file->last_accessed_date, "%d-%d-%d", &dd, &mm, &yyyy);
+    
+    x = (yyyy * 10000) + (mm * 100) + dd;
+    return x;
+}
+
+long formatted_lastmodificateddate(node* file)
+{
+    int dd, mm, yyyy;
+    long x;
+
+    sscanf_s(file->last_modificated_date, "%d-%d-%d", &dd, &mm, &yyyy);
+
+    x = (yyyy * 10000) + (mm * 100) + dd;
+    return x;
+}
+
+
 bool is_redudant(node* file) {
-    return false;
+
+    return 0;
 }
 
 bool is_old(node* file) {
-    return false;
+
+
+    return 0;
 }
 
 bool is_empty__(node* file) {
-    return false;
+
+    
+
+    return 0;
 }
 
-bool is_low_accessed(node* file) {
-    return false;
-}
+bool is_low_accessed(node* file, int acc ) {
 
-bool IsValid(node* file) {
-    if (is_redudant(file)) return false;
+    if (file->access_count < acc)
+    {
+        return 0;
+    }
+
     else {
-        if (is_old(file)) return false;
+        return 1;
+    }
+}
+
+
+bool IsValid(node* file, int acc) {
+
+    if (is_redudant(file)) ;
+
+    else {
+        if ( is_old(file) ) ;
+
         else {
-            if (is_empty__(file)) return false;
+            if (is_empty__(file)) ;
+
             else {
-                if (is_low_accessed(file)) return false;
+                if (is_low_accessed(file,acc)) ;
+
                 else {
-                    return true;
+                    return 1;
                 }
             }
         }
     }
+
+    return 0;
+
 }
 
 list readInputData(const string& file_path,list* validfiles) {
