@@ -155,7 +155,7 @@ long formatted_createdate(node* file)
     int dd, mm, yyyy;
     long x;
 
-    sscanf((*file->created_date).c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
+    sscanf_s((*file->created_date).c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
 
     x = (yyyy * 10000) + (mm * 100) + dd;
     return x;
@@ -166,7 +166,7 @@ long formatted_lastaccesseddate(node* file)
     int dd, mm, yyyy;
     long x;
 
-    sscanf((*file->last_accessed_date).c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
+    sscanf_s((*file->last_accessed_date).c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
     
     x = (yyyy * 10000) + (mm * 100) + dd;
     return x;
@@ -177,7 +177,7 @@ long formatted_lastmodificateddate(node* file)
     int dd, mm, yyyy;
     long x;
 
-    sscanf((*file->last_modificated_date).c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
+    sscanf_s((*file->last_modificated_date).c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
 
     x = (yyyy * 10000) + (mm * 100) + dd;
     return x;
@@ -232,9 +232,10 @@ bool is_empty__(node* file) {
 
     return false;
 }
-bool is_low_accessed(node* file, int acc ) {
+bool is_low_accessed(node *file,int acc) {
 
     if (file->access_count < acc) return true;
+
         
     return false;
 }

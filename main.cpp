@@ -108,7 +108,7 @@ selection:
 			int dd, mm, yyyy;
 			long date;
 
-			sscanf(date_str.c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
+			sscanf_s(date_str.c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
 
 			date = (yyyy * 10000) + (mm * 100) + dd;
 			sepratedata_by_all(file_location, &remain, &bin, min_acc, date, "By creation date");
@@ -122,7 +122,7 @@ selection:
 			int dd, mm, yyyy;
 			long date;
 
-			sscanf(date_str.c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
+			sscanf_s(date_str.c_str(), "%d-%d-%d", &dd, &mm, &yyyy);
 
 			date = (yyyy * 10000) + (mm * 100) + dd;
 			sepratedata_by_date(file_location, &remain, &bin, date, "By creation date");
