@@ -3,8 +3,11 @@
 #include <cstdio>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
 #include <string>
 #include<ctime>
+
+
 using namespace std;
 
 void displayErrorMessage(const string& message, const string* description);
@@ -46,6 +49,7 @@ public:
 	Linkedlist();
 	void Insert(node * element);
     node* remove(string name);
+    int Size();
 	void Display();
 	void ls();
     bool Find_redundant(int key);
@@ -75,6 +79,6 @@ void sepratedata_by_date(const string& file_path, list* validfiles, list* binfil
 
 void get_saved_memory();
 
-void correction(node* file, list *bin, list* valid);
+void correction(string file_name, list *bin, list* valid);
 
-void openfile(string file);
+void remove_list(list* bin);

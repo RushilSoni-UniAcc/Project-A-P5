@@ -3,10 +3,9 @@
 long saved_memory = 0;
 
 void displayErrorMessage(const string& message, const string* description) {
-    string padding(20, ' ');
 
-    cout << "\033[31m";
-    cout << padding << message << "\n";
+    cout << "\n\n\033[31m";
+    cout <<  message;
     cout << *description << "\n";
     cout << "\033[0m";
 }
@@ -68,6 +67,7 @@ void Linkedlist::Make_Empty() {
 
     Header = nullptr;
 }
+int Linkedlist::Size() { return size ;}
 
 void Linkedlist::Insert(node* element) {
     size++;
@@ -86,12 +86,14 @@ node* Linkedlist::remove(string name){
     node* currant = Header->next;
     node* previous = currant;
     if (*previous->name == name) {
+        size--;
         Header = currant;
         return previous;
     }
 
     while (previous!= nullptr) {
         if (*currant->name == name) {
+            size--;
             previous->next = currant->next;
             return currant;
         }
@@ -255,7 +257,6 @@ void sepratedata_by_all(const string& file_path,list* validfiles,list* binfiles,
 
     ifstream file(file_path);
     if (!file.is_open()) {
-        cerr << "Failed to open file: " << file_path << "\n";
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
         displayErrorMessage(msg, &description);
@@ -313,7 +314,6 @@ void sepratedata_by_empty(const string& file_path, list* validfiles, list* binfi
 
     ifstream file(file_path);
     if (!file.is_open()) {
-        cerr << "Failed to open file: " << file_path << "\n";
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
         displayErrorMessage(msg, &description);
@@ -371,7 +371,6 @@ void sepratedata_by_date(const string& file_path, list* validfiles, list* binfil
 
     ifstream file(file_path);
     if (!file.is_open()) {
-        cerr << "Failed to open file: " << file_path << "\n";
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
         displayErrorMessage(msg, &description);
@@ -429,7 +428,6 @@ void sepratedata_by_access_count(const string& file_path, list* validfiles, list
 
     ifstream file(file_path);
     if (!file.is_open()) {
-        cerr << "Failed to open file: " << file_path << "\n";
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
         displayErrorMessage(msg, &description);
@@ -492,16 +490,14 @@ void correction(string file_name, list *bin, list* valid) {
     }
 }
 
-void openfile(string file) {
-    string command;
-#ifdef _WIN32
-    command = "start  notepad \"" + file + "\""; // For Windows
-#else
-    command = "xdg-open remaining_files"; // For Linux/macOS
-#endif
-    int result = system(command.c_str());
-    if (result != 0) {
-        string description = "Error: Failed to open the file." + file;
-        displayErrorMessage("Error: Failed to open the file.", &description);
+
+void remove_list(list* bin) {
+    node* currant = bin->gethead();
+    while (currant != nullptr) {
+        saved_memory+=currant->size_of_file;
+        string element = "sample\\" + *currant->name;
+        cout << element;
+        remove(element.c_str());
+        currant = currant->next;
     }
 }
