@@ -18,7 +18,6 @@ struct node {
     string* URL;
     node* next;
 
-    // Constructor
     node(const string& name, int access_count, const string& last_accessed_date, const string& last_modificated_date, const string& created_date, long size_of_file, const string& URL)
         : access_count(access_count), size_of_file(size_of_file), next(nullptr) {
         this->name = new string(name);
@@ -28,7 +27,6 @@ struct node {
         this->URL = new string(URL);
     }
 
-    // Destructor
     ~node() {
         delete name;
         delete created_date;
@@ -48,6 +46,7 @@ public:
 	int Size();
 	void Insert(node * element);
 	void Display();
+	void ls();
 	node* gethead();
 	void Make_Empty();
 	~Linkedlist();
@@ -65,8 +64,4 @@ bool is_low_accessed(node* file, int acc);
 
 bool IsValid(node* file, int acc);
 
-
-
-
 void readInputData(const string& file_path,list* validfile,list* binfile);
-

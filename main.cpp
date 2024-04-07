@@ -6,10 +6,11 @@
 int main() {
 	list L, p;
 	readInputData("Trial excel sheet containing folders.csv",&L,&p);
-	L.Display();
-	cout << "\033[31m";
+	L.ls();
+	cout << "\033[31";
 	cout << "************************************************************************************************************************\n";
-	p.Display();
-	cout << "\033[0m";
+	cout << "\033[31;40m";
+	p.ls();
+	cout << "\033[0m\n";
 	return 0;
 }

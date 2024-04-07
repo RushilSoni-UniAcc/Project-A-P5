@@ -9,12 +9,12 @@ void displayErrorMessage(const string& message, const string* description) {
     cout << "\033[0m";
 }
 
-Linkedlist::Linkedlist() {
+list::Linkedlist() {
     size = 0;
     Header = NULL;
 }
 
-Linkedlist::~Linkedlist() {
+list::~Linkedlist() {
     node* current = Header;
     while (current != nullptr) {
         node* temp = current;
@@ -27,7 +27,7 @@ node* list::gethead() {
     return Header;
 }
 
-void Linkedlist::Display() {
+void list::Display() {
     node* currant = Header;
     if (currant == nullptr) {
         return;
@@ -45,11 +45,24 @@ void Linkedlist::Display() {
     }
 }
 
-int Linkedlist::Size() {
+void list::ls() {
+    node* currant = Header;
+    if (currant == nullptr) {
+        return;
+    }
+        cout << "\n     last access time\taccessed               length\tName of the file\n";
+        cout << "\n     ----------------\t--------               ------\t--------------------------------\n";
+    while (currant != nullptr) {
+        cout << "     "<< * currant->last_accessed_date << "\t  " << currant->access_count << "     \t       " << currant->size_of_file << "\t" << *currant->name<< "\n";
+        currant = currant->next;
+    }
+}
+
+int list::Size() {
     return size;
 }
 
-void Linkedlist::Make_Empty() {
+void list::Make_Empty() {
     node* current = Header;
     node* nextNode;
 
@@ -62,7 +75,7 @@ void Linkedlist::Make_Empty() {
     Header = nullptr;
 }
 
-void Linkedlist::Insert(node* element) {
+void list::Insert(node* element) {
     size++;
     if (Header == NULL) {
         Header = element;
@@ -117,8 +130,9 @@ bool is_redudant(node* file) {
 
 bool is_old(node* file) {
 
+    if (file->size_of_file == 0) return true;
 
-    return 0;
+    return false;
 }
 
 bool is_empty__(node* file) {
