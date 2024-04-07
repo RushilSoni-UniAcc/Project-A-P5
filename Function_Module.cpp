@@ -2,21 +2,7 @@
 
 long saved_memory = 0;
 
-int get_choise(string why) {
-    string x;
-    cout << why;
-    cin >> x;
-    if (x.length() > 0) {
-        char X = x[0];
-        if (X == 'y' || X == 'Y') {
-            return  0;
-        }
-        else if (X == 'n' || X == 'N') {
-            return -1;
-        }
-    }
-    return 1;
-}
+
 void displayErrorMessage(const string& message, const string* description) {
 
     cout << "\n\n\033[91m";
@@ -112,6 +98,8 @@ node* Linkedlist::remove(string name){
             previous->next = currant->next;
             return currant;
         }
+        previous = currant;
+        currant = currant->next;
     }
     return nullptr;
 }
@@ -195,7 +183,7 @@ long formatted_lastmodificateddate(node* file)
     return x;
 }
 
-void remove_redundant(node* file,list* list) {
+void remove_redundant(node * file,list* list) {
     node* currant = list->gethead();
     while (currant != nullptr) {
         if (list->Find_redundant(file->size_of_file)) {
@@ -208,6 +196,7 @@ void remove_redundant(node* file,list* list) {
                 saved_memory += file->size_of_file;
             }
         }
+        currant = currant->next;
     }
     return ;
 }
@@ -274,7 +263,7 @@ void sepratedata_by_all(const string& file_path,list* validfiles,list* binfiles,
     if (!file.is_open()) {
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
-        displayErrorMessage(msg, &description);
+        displayErrorMessage(msg, &description);exit(0);
         return;
     }
 
@@ -307,7 +296,7 @@ void sepratedata_by_all(const string& file_path,list* validfiles,list* binfiles,
             string description = "Invalid File name : In the File " + to_string(filenumber) + " From top.\nPlease check that the file name is as required.";
             displayErrorMessage("Invalid File name", &description);
             validfiles->Make_Empty();
-            binfiles->Make_Empty();
+            binfiles->Make_Empty();exit(0);
             break;
         }
 
@@ -331,7 +320,7 @@ void sepratedata_by_empty(const string& file_path, list* validfiles, list* binfi
     if (!file.is_open()) {
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
-        displayErrorMessage(msg, &description);
+        displayErrorMessage(msg, &description);exit(0);
         return;
     }
 
@@ -364,7 +353,7 @@ void sepratedata_by_empty(const string& file_path, list* validfiles, list* binfi
             string description = "Invalid File name : In the File " + to_string(filenumber) + " From top.\nPlease check that the file name is as required.";
             displayErrorMessage("Invalid File name", &description);
             validfiles->Make_Empty();
-            binfiles->Make_Empty();
+            binfiles->Make_Empty();exit(0);
             break;
         }
 
@@ -389,6 +378,7 @@ void sepratedata_by_date(const string& file_path, list* validfiles, list* binfil
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
         displayErrorMessage(msg, &description);
+        exit(0);
         return;
     }
 
@@ -422,6 +412,7 @@ void sepratedata_by_date(const string& file_path, list* validfiles, list* binfil
             displayErrorMessage("Invalid File name", &description);
             validfiles->Make_Empty();
             binfiles->Make_Empty();
+            exit(0);
             break;
         }
 
@@ -446,6 +437,7 @@ void sepratedata_by_access_count(const string& file_path, list* validfiles, list
         const string msg = "Failed to open file: " + file_path + "\n";
         string description = "File not found.";
         displayErrorMessage(msg, &description);
+        exit(0);
         return;
     }
 
@@ -479,6 +471,7 @@ void sepratedata_by_access_count(const string& file_path, list* validfiles, list
             displayErrorMessage("Invalid File name", &description);
             validfiles->Make_Empty();
             binfiles->Make_Empty();
+            exit(0);
             break;
         }
 
@@ -494,14 +487,20 @@ void sepratedata_by_access_count(const string& file_path, list* validfiles, list
     file.close();
 }
 
-void get_saved_memory() {
-
+long get_saved_memory() {
+    return saved_memory;
 }
 
 
-void correction(string file_name, list *bin, list* valid) {
-    if (bin->search(file_name)) {
-        valid->Insert(bin->remove(file_name));
+void restore(string file_name, list *bin, list* valid) {
+    node* file_node = bin->remove(file_name);
+    if (file_node != nullptr) {
+        cout << *file_node->name;
+        valid->Insert(file_node);
+    }
+    else {
+        string description = "Invalid File name : The file " + file_name + " is not in the bin list.Please make sure that you give correct File name in the input.";
+        displayErrorMessage("Invalid File name", &description);
     }
 }
 
