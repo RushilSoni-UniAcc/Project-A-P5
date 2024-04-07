@@ -166,10 +166,10 @@ correction:
 		cout << "\033[0m \n\n";
 		if (bin.gethead() == nullptr) {
 			cout << "there are no files which are empty in " + file_location + "\n";
-			cout << "going back to the Selection Display.";
+			cout << "terminating the programme";
 			clock_t start_time = clock();
 			while ((clock() - start_time) / CLOCKS_PER_SEC < 3);
-			goto selection;
+			exit(0);
 		}
 		else {
 			cout << "The above files are the ones which will be deleted after this step :\n";

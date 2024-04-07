@@ -3,7 +3,7 @@
 long saved_memory = 0;
 
 
-void displayErrorMessage(const string& message, const string* description) {
+void displayErrorMessage(const string& message, const string* description) {//function for error mesages.
 
     cout << "\n\n\033[91m";
     cout <<  message;
