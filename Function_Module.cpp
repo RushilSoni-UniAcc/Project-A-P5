@@ -491,8 +491,9 @@ long get_saved_memory() {
     return saved_memory;
 }
 
-
-void restore(string file_name, list *bin, list* valid) {
+void correction(string file_name, list* bin, list* valid)
+{
+    cout << bin->remove(file_name);
     node* file_node = bin->remove(file_name);
     if (file_node != nullptr) {
         cout << *file_node->name;
@@ -505,11 +506,23 @@ void restore(string file_name, list *bin, list* valid) {
 }
 
 
+
+
 void remove_list(list* bin,string directory) {
     node* currant = bin->gethead();
     while (currant != nullptr) {
         saved_memory+=currant->size_of_file;
         string element = directory+"\\" + *currant->name;
+        remove(element.c_str());
+        currant = currant->next;
+    }
+}
+
+void remove_list(list* bin) {
+    node* currant = bin->gethead();
+    while (currant != nullptr) {
+        saved_memory += currant->size_of_file;
+        string element =   *currant->name;
         remove(element.c_str());
         currant = currant->next;
     }

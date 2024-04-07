@@ -77,9 +77,9 @@ void sepratedata_by_all(const string& file_path, list* validfiles, list* binfile
 void sepratedata_by_empty(const string& file_path, list* validfiles, list* binfiles);
 void sepratedata_by_access_count(const string& file_path, list* validfiles, list* binfiles, int min_acc);
 void sepratedata_by_date(const string& file_path, list* validfiles, list* binfiles, long min_date, string methode);
-
+void correction(string file_name, list* bin, list* valid);
 long get_saved_memory();
 
-void restore(string file_name, list *bin, list* valid);
 
 void remove_list(list* bin, string directory);
+void remove_list(list* bin);
