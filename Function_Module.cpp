@@ -1,5 +1,7 @@
 #include "Function_Module.h"
 
+long saved_memory = 0;
+
 void displayErrorMessage(const string& message, const string* description) {
     string padding(20, ' ');
 
@@ -9,12 +11,12 @@ void displayErrorMessage(const string& message, const string* description) {
     cout << "\033[0m";
 }
 
-list::Linkedlist() {
+Linkedlist::Linkedlist() {
     size = 0;
     Header = NULL;
 }
 
-list::~Linkedlist() {
+Linkedlist::~Linkedlist() {
     node* current = Header;
     while (current != nullptr) {
         node* temp = current;
@@ -23,11 +25,7 @@ list::~Linkedlist() {
     }
 }
 
-node* list::gethead() {
-    return Header;
-}
-
-void list::Display() {
+void Linkedlist::Display() {
     node* currant = Header;
     if (currant == nullptr) {
         return;
@@ -45,7 +43,7 @@ void list::Display() {
     }
 }
 
-void list::ls() {
+void Linkedlist::ls() {
     node* currant = Header;
     if (currant == nullptr) {
         return;
@@ -58,11 +56,7 @@ void list::ls() {
     }
 }
 
-int list::Size() {
-    return size;
-}
-
-void list::Make_Empty() {
+void Linkedlist::Make_Empty() {
     node* current = Header;
     node* nextNode;
 
@@ -75,7 +69,7 @@ void list::Make_Empty() {
     Header = nullptr;
 }
 
-void list::Insert(node* element) {
+void Linkedlist::Insert(node* element) {
     size++;
     if (Header == NULL) {
         Header = element;
@@ -87,6 +81,68 @@ void list::Insert(node* element) {
         }
         currant->next = element;
     }
+}
+node* Linkedlist::remove(string name){
+    node* currant = Header->next;
+    node* previous = currant;
+    if (*previous->name == name) {
+        Header = currant;
+        return previous;
+    }
+
+    while (previous!= nullptr) {
+        if (*currant->name == name) {
+            previous->next = currant->next;
+            return currant;
+        }
+    }
+    return nullptr;
+}
+bool Linkedlist::Find_redundant(int key) {
+    node* currant = Header;
+    while (currant != nullptr) {
+        if (currant->size_of_file == key) break;
+        currant = currant->next;
+    }
+    if (currant!=nullptr) return true;
+    else return false;
+}
+bool Linkedlist::search(string name ) {
+    node* currant = Header;
+    while (currant != nullptr) {
+        if (*(currant->name) == name) {
+            return true;
+        }
+        currant = currant->next;
+    }
+    return false;
+}
+node* Linkedlist::gethead() {
+    return Header;
+}
+void Linkedlist::writeCSV(const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        const string msg = "Error: Unable to open file " + filename;
+        string description = "There was an error in creating the CSV file it may have to do with system settings.Please check the settings after that run the program";
+        displayErrorMessage(msg, &description);
+        return;
+    }
+
+      cout   << "----------------------------------------" << "\n\n";
+    node* currant = Header;
+    while (currant != nullptr) {
+        file << "\nName of the file                  : " << *currant->name << "\n"
+         << "number of Times accessed          : " << currant->access_count << "\n"
+         << "Last date of access               : " << *currant->last_accessed_date << "\n"
+         << "Last date of modification         : " << *currant->last_modificated_date << "\n"
+         << "created file on                   : " << *currant->created_date << "\n"
+         << "size of the file                  : " << currant->size_of_file << "\n"
+         << "file location                     : " << *currant->URL << "\n\n"
+         << "----------------------------------------" << "\n\n";
+        currant = currant->next;
+    }
+    file.close();
 }
 
 long formatted_createdate(node* file)
@@ -122,45 +178,62 @@ long formatted_lastmodificateddate(node* file)
     return x;
 }
 
-
-bool is_redudant(node* file) {
-
-    return 0;
+void remove_redundant(node* file,list* list) {
+    node* currant = list->gethead();
+    while (currant != nullptr) {
+        if (list->Find_redundant(file->size_of_file)) {
+            if (remove(file->name->c_str()) != 0) {
+                string description = "Error deleting a file: In the File " + (*file->URL) + "\nPlease check that the file.";
+                displayErrorMessage("Error deleting a file", &description);
+                exit(0);
+            }
+            else {
+                saved_memory += file->size_of_file;
+            }
+        }
+    }
+    return ;
 }
 
-bool is_old(node* file) {
+bool is_old(node* file,long date,string methode) {
+
+    if (methode == "By creation date") {
+        if (formatted_createdate(file) < date) {
+            return true;
+        }
+        else return false;
+    }
+
+    if (methode == "By modification date") {
+        if (formatted_lastmodificateddate(file) < date) {
+            return true;
+        }
+        else return false;
+    }
+
+    if (methode == "By access date") {
+        if (formatted_lastaccesseddate(file) < date) {
+            return true;
+        }
+        else return false;
+    }
+
+    return false;
+}
+bool is_empty__(node* file) {
 
     if (file->size_of_file == 0) return true;
 
     return false;
 }
-
-bool is_empty__(node* file) {
-
-    
-
-    return 0;
-}
-
 bool is_low_accessed(node* file, int acc ) {
 
-    if (file->access_count <= acc)
-    {
-        return true;
-    }
-
-    else {
-        return false;
-    }
+    if (file->access_count < acc) return true;
+        
+    return false;
 }
-
-
-bool IsValid(node* file, int acc) {
-
-    if (is_redudant(file)) return false;
-
-    else {
-        if ( is_old(file) )return false;
+bool IsValid(node* file, int acc,long date, string methode) {
+        if ( is_old(file,date, methode) )return false;
 
         else {
             if (is_empty__(file)) return false;
@@ -173,13 +246,9 @@ bool IsValid(node* file, int acc) {
                 }
             }
         }
-    }
-
-    return 0;
-
 }
 
-void readInputData(const string& file_path,list* validfiles,list* binfiles) {
+void sepratedata_by_all(const string& file_path,list* validfiles,list* binfiles,int min_acc,long min_date, string methode) {
     
     int filenumber = 0;
 
@@ -227,7 +296,7 @@ void readInputData(const string& file_path,list* validfiles,list* binfiles) {
         }
 
         node* file_element = new node(name, access_count, date_accessed, date_modified, date_created,size__,URL);
-        if (!IsValid(file_element,20)) {
+        if (!IsValid(file_element, min_acc,min_date,methode)) {
             binfiles->Insert(file_element);
         }
         else {
@@ -237,21 +306,202 @@ void readInputData(const string& file_path,list* validfiles,list* binfiles) {
     
     file.close();
 }
+void sepratedata_by_empty(const string& file_path, list* validfiles, list* binfiles) {
 
-void list::writeCSV(const string& filename) {
-    ofstream file(filename);
+    int filenumber = 0;
+
+
+    ifstream file(file_path);
     if (!file.is_open()) {
-        const string msg = "Error: Unable to open file " + filename;
-        string description = "There was an error in creating the CSV file it may have to do with system settings.Please check the settings after that run the program";
+        cerr << "Failed to open file: " << file_path << "\n";
+        const string msg = "Failed to open file: " + file_path + "\n";
+        string description = "File not found.";
         displayErrorMessage(msg, &description);
         return;
     }
 
-    file << "Name,Times accessed,Date accessed,Date modified,Date created,Size(in bytes),URL" << "\n";
-    node* temp = Header;
-    while (temp != nullptr) {
-        file << *temp->name << "," << temp->access_count << "," << *temp->last_accessed_date << "," << *temp->last_modificated_date << "," << *temp->created_date << "," << temp->size_of_file << "," << *temp->URL << "\n";
-        temp = temp->next;
+    string line;
+    getline(file, line);
+
+
+    while (getline(file, line)) {
+
+        filenumber++;
+        stringstream ss(line);
+        string name, access_count_str, date_accessed, date_modified, date_created, size_str, URL;
+
+
+        getline(ss, name, ',');
+        getline(ss, access_count_str, ',');
+        getline(ss, date_accessed, ',');
+        getline(ss, date_modified, ',');
+        getline(ss, date_created, ',');
+        getline(ss, size_str, ',');
+        getline(ss, URL);
+
+        int access_count;
+        long size__;
+        try {
+            access_count = stoi(access_count_str);
+            size__ = stol(size_str);
+        }
+        catch (const invalid_argument& e) {
+            string description = "Invalid File name : In the File " + to_string(filenumber) + " From top.\nPlease check that the file name is as required.";
+            displayErrorMessage("Invalid File name", &description);
+            validfiles->Make_Empty();
+            binfiles->Make_Empty();
+            break;
+        }
+
+        node* file_element = new node(name, access_count, date_accessed, date_modified, date_created, size__, URL);
+        if (is_empty__(file_element)) {
+            binfiles->Insert(file_element);
+        }
+        else {
+            validfiles->Insert(file_element);
+        }
     }
+
     file.close();
+}
+void sepratedata_by_date(const string& file_path, list* validfiles, list* binfiles,long date,string methode) {
+
+    int filenumber = 0;
+
+
+    ifstream file(file_path);
+    if (!file.is_open()) {
+        cerr << "Failed to open file: " << file_path << "\n";
+        const string msg = "Failed to open file: " + file_path + "\n";
+        string description = "File not found.";
+        displayErrorMessage(msg, &description);
+        return;
+    }
+
+    string line;
+    getline(file, line);
+
+
+    while (getline(file, line)) {
+
+        filenumber++;
+        stringstream ss(line);
+        string name, access_count_str, date_accessed, date_modified, date_created, size_str, URL;
+
+
+        getline(ss, name, ',');
+        getline(ss, access_count_str, ',');
+        getline(ss, date_accessed, ',');
+        getline(ss, date_modified, ',');
+        getline(ss, date_created, ',');
+        getline(ss, size_str, ',');
+        getline(ss, URL);
+
+        int access_count;
+        long size__;
+        try {
+            access_count = stoi(access_count_str);
+            size__ = stol(size_str);
+        }
+        catch (const invalid_argument& e) {
+            string description = "Invalid File name : In the File " + to_string(filenumber) + " From top.\nPlease check that the file name is as required.";
+            displayErrorMessage("Invalid File name", &description);
+            validfiles->Make_Empty();
+            binfiles->Make_Empty();
+            break;
+        }
+
+        node* file_element = new node(name, access_count, date_accessed, date_modified, date_created, size__, URL);
+        if (is_old(file_element,date,methode)) {
+            binfiles->Insert(file_element);
+        }
+        else {
+            validfiles->Insert(file_element);
+        }
+    }
+
+    file.close();
+}
+void sepratedata_by_access_count(const string& file_path, list* validfiles, list* binfiles, int min_acc) {
+
+    int filenumber = 0;
+
+
+    ifstream file(file_path);
+    if (!file.is_open()) {
+        cerr << "Failed to open file: " << file_path << "\n";
+        const string msg = "Failed to open file: " + file_path + "\n";
+        string description = "File not found.";
+        displayErrorMessage(msg, &description);
+        return;
+    }
+
+    string line;
+    getline(file, line);
+
+
+    while (getline(file, line)) {
+
+        filenumber++;
+        stringstream ss(line);
+        string name, access_count_str, date_accessed, date_modified, date_created, size_str, URL;
+
+
+        getline(ss, name, ',');
+        getline(ss, access_count_str, ',');
+        getline(ss, date_accessed, ',');
+        getline(ss, date_modified, ',');
+        getline(ss, date_created, ',');
+        getline(ss, size_str, ',');
+        getline(ss, URL);
+
+        int access_count;
+        long size__;
+        try {
+            access_count = stoi(access_count_str);
+            size__ = stol(size_str);
+        }
+        catch (const invalid_argument& e) {
+            string description = "Invalid File name : In the File " + to_string(filenumber) + " From top.\nPlease check that the file name is as required.";
+            displayErrorMessage("Invalid File name", &description);
+            validfiles->Make_Empty();
+            binfiles->Make_Empty();
+            break;
+        }
+
+        node* file_element = new node(name, access_count, date_accessed, date_modified, date_created, size__, URL);
+        if (is_low_accessed(file_element, min_acc)) {
+            binfiles->Insert(file_element);
+        }
+        else {
+            validfiles->Insert(file_element);
+        }
+    }
+
+    file.close();
+}
+
+void get_saved_memory() {
+
+}
+
+
+void correction(string file_name, list *bin, list* valid) {
+    if (bin->search(file_name)) {
+        valid->Insert(bin->remove(file_name));
+    }
+}
+
+void openfile(string file) {
+    string command;
+#ifdef _WIN32
+    command = "start  notepad \"" + file + "\""; // For Windows
+#else
+    command = "xdg-open remaining_files"; // For Linux/macOS
+#endif
+    int result = system(command.c_str());
+    if (result != 0) {
+        string description = "Error: Failed to open the file." + file;
+        displayErrorMessage("Error: Failed to open the file.", &description);
+    }
 }

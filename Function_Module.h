@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include<ctime>
 using namespace std;
 
 void displayErrorMessage(const string& message, const string* description);
@@ -43,11 +44,13 @@ private:
 	int size;
 public:
 	Linkedlist();
-	int Size();
 	void Insert(node * element);
+    node* remove(string name);
 	void Display();
 	void ls();
-	node* gethead();
+    bool Find_redundant(int key);
+    node* gethead();
+    bool search(string name);
 	void Make_Empty();
     void writeCSV(const string& filename);
 	~Linkedlist();
@@ -58,12 +61,20 @@ long formatted_createdate(node* file);
 long formatted_lastaccesseddate(node* file);
 long formatted_lastmodificateddate(node* file);
 
-bool is_redudant(node* file);
-bool is_old(node* file);
+void remove_redundant(node* file,list* list);
+bool is_old(node* file, long date, string methode);
 bool is_empty__(node* file);
 bool is_low_accessed(node* file, int acc);
 
-bool IsValid(node* file, int acc);
+bool IsValid(node* file, int acc,long date, string methode);
 
-void readInputData(const string& file_path,list* validfile,list* binfile);
+void sepratedata_by_all(const string& file_path, list* validfiles, list* binfiles, int min_acc, long min_date, string methode);
+void sepratedata_by_empty(const string& file_path, list* validfiles, list* binfiles);
+void sepratedata_by_access_count(const string& file_path, list* validfiles, list* binfiles, int min_acc);
+void sepratedata_by_date(const string& file_path, list* validfiles, list* binfiles, long min_date, string methode);
 
+void get_saved_memory();
+
+void correction(node* file, list *bin, list* valid);
+
+void openfile(string file);
