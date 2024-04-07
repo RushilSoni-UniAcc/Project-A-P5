@@ -237,3 +237,21 @@ void readInputData(const string& file_path,list* validfiles,list* binfiles) {
     
     file.close();
 }
+
+void list::writeCSV(const string& filename) {
+    ofstream file(filename);
+    if (!file.is_open()) {
+        const string msg = "Error: Unable to open file " + filename;
+        string description = "There was an error in creating the CSV file it may have to do with system settings.Please check the settings after that run the program";
+        displayErrorMessage(msg, &description);
+        return;
+    }
+
+    file << "Name,Times accessed,Date accessed,Date modified,Date created,Size(in bytes),URL" << "\n";
+    node* temp = Header;
+    while (temp != nullptr) {
+        file << *temp->name << "," << temp->access_count << "," << *temp->last_accessed_date << "," << *temp->last_modificated_date << "," << *temp->created_date << "," << temp->size_of_file << "," << *temp->URL << "\n";
+        temp = temp->next;
+    }
+    file.close();
+}

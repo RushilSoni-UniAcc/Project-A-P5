@@ -49,6 +49,7 @@ public:
 	void ls();
 	node* gethead();
 	void Make_Empty();
+    void writeCSV(const string& filename);
 	~Linkedlist();
 
 } list;
@@ -65,3 +66,4 @@ bool is_low_accessed(node* file, int acc);
 bool IsValid(node* file, int acc);
 
 void readInputData(const string& file_path,list* validfile,list* binfile);
+

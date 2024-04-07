@@ -6,11 +6,15 @@
 int main() {
 	list L, p;
 	readInputData("Trial excel sheet containing folders.csv",&L,&p);
-	L.ls();
+
+	/*L.ls();
 	cout << "\033[31";
 	cout << "************************************************************************************************************************\n";
 	cout << "\033[31;40m";
 	p.ls();
-	cout << "\033[0m\n";
+	cout << "\033[0m\n";*/
+
+	L.writeCSV("remaining_files");
+	p.writeCSV("files_that_shiuld be deleted");
 	return 0;
 }
