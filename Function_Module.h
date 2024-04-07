@@ -11,6 +11,8 @@
 using namespace std;
 
 void displayErrorMessage(const string& message, const string* description);
+int get_choise(string why);
+
 
 struct node {
     string* name;
@@ -81,4 +83,4 @@ void get_saved_memory();
 
 void correction(string file_name, list *bin, list* valid);
 
-void remove_list(list* bin);
+void remove_list(list* bin, string directory);

@@ -2,9 +2,24 @@
 
 long saved_memory = 0;
 
+int get_choise(string why) {
+    string x;
+    cout << why;
+    cin >> x;
+    if (x.length() > 0) {
+        char X = x[0];
+        if (X == 'y' || X == 'Y') {
+            return  0;
+        }
+        else if (X == 'n' || X == 'N') {
+            return -1;
+        }
+    }
+    return 1;
+}
 void displayErrorMessage(const string& message, const string* description) {
 
-    cout << "\n\n\033[31m";
+    cout << "\n\n\033[91m";
     cout <<  message;
     cout << *description << "\n";
     cout << "\033[0m";
@@ -491,12 +506,11 @@ void correction(string file_name, list *bin, list* valid) {
 }
 
 
-void remove_list(list* bin) {
+void remove_list(list* bin,string directory) {
     node* currant = bin->gethead();
     while (currant != nullptr) {
         saved_memory+=currant->size_of_file;
-        string element = "sample\\" + *currant->name;
-        cout << element;
+        string element = directory+"\\" + *currant->name;
         remove(element.c_str());
         currant = currant->next;
     }
