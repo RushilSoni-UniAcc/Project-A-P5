@@ -1,4 +1,4 @@
-#Folder-Cleaner
+# Folder-Cleaner
 
 This is a Folder Cleaner which will delete files based on following criteria’s: - </br>
 •	Files which are older than a particular date (input provided by the user).</br>
